@@ -14,28 +14,32 @@ class User < ApplicationRecord
 
     def self.find_by_credentials(email, pw)
         match = self.find_by(email: email)
+        return nil unless match
+
         match.is_password?(pw) ? match : nil
     end
-
+    
     def password=(pw)
         @password = pw
         self.password_digest = BCrypt::Password.create(pw)
     end
-
+    
     def reset_session_token!
-        self.session_token = generate_session_token
-        self.save!
-
+        @session_token = generate_session_token
+        save!
+        
         self.session_token
     end
-
+    
     def is_password?(pw)
         BCrypt::Password
-            .new(self.password_digest)
-            .is_password?(pw)
+        .new(self.password_digest)
+        .is_password?(pw)
     end
-
-    private
+    
+    def ensure_session_token
+        self.session_token ||= generate_session_token
+    end
 
     def generate_session_token
         loop do
@@ -43,9 +47,9 @@ class User < ApplicationRecord
             return token unless self.class.exists?(session_token: token)
         end
     end
+    
+    private
 
-    def ensure_session_token
-        self.session_token ||= generate_session_token
-    end
+
 
 end
