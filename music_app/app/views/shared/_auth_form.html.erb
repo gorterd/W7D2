@@ -1,0 +1,24 @@
+<% if is_login %>
+    <% url = session_url %>
+    <% submit_text = "login" %>
+<% else %>
+    <% url = users_url %>
+    <% submit_text = "sign up" %>
+<% end %>
+
+
+<form action=" <%= url %> " method="post">
+    <%= auth_token %>
+
+    <label for="email">email: </label>
+    <input id="email" type="text" name="user[email]" value="<%= user.email %>">
+
+    <br>
+    
+    <label for="password">password: </label>
+    <input id="password" type="password" name="user[password]">
+
+    <br>
+
+    <input type="submit" value="<%= submit_text %>">
+</form>

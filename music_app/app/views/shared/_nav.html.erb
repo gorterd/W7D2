@@ -1,0 +1,12 @@
+<% if logged_in? %>
+
+    <p> signed in as: <%= current_user.email  %> </p>
+    <%= button_to "logout", session_url, method: :delete %>
+
+<% else %>
+
+    <a href="<%= new_session_url %>"> login </a>
+
+    <a href="<%= new_user_url %>"> sign up </a>
+
+<% end %>
